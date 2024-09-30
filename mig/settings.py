@@ -87,7 +87,7 @@ DATABASES = {
             "options": "-c search_path=django"  # 스키마 이름
         },
     }
-}
+} 
 
 
 # Password validation
