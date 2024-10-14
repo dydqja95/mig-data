@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="container mt-5">
     <h2 class="mb-4">커넥션 목록</h2>
@@ -99,25 +98,4 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('addConnectionForm').addEventListener('submit', function(event) {
-        const fields = ['conn_name', 'conn_type', 'owner', 'ip', 'port', 'user', 'pwd'];
-        let isValid = true;
-
-        fields.forEach(function(field) {
-            const input = document.getElementById(field);
-            if (!input.value) {
-                isValid = false;
-                input.classList.add('is-invalid');  // Bootstrap의 유효성 검사 스타일 추가
-            } else {
-                input.classList.remove('is-invalid');  // 유효성 검사 통과 시 스타일 제거
-            }
-        });
-
-        if (!isValid) {
-            event.preventDefault();  // 폼 제출 방지
-            alert('모든 필드를 채워주세요.');  // 사용자에게 알림
-        }
-    });
-</script>
 {% endblock %}

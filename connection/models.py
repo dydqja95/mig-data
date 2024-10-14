@@ -10,7 +10,7 @@ class Connection(models.Model):
         ('postgresql', 'Postgresql'),
     ]
     id = models.AutoField(primary_key=True)  # pk
-    conn_name = models.CharField(max_length=255, null=False)  # 커넥션명
+    conn_name = models.CharField(max_length=255, unique=True, null=False)  # 커넥션명
     conn_type = models.CharField(max_length=255, choices=CONNECTION_TYPE_CHOICES, null=False)  # 커넥션 타입 (oracle, postgresql, bigquery)
     owner = models.CharField(max_length=255, null=False)
     ip = models.GenericIPAddressField(null=False)

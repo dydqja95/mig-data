@@ -11,9 +11,12 @@ def connection_create(request):
         form = ConnectionForm(request.POST)
         if form.is_valid():
             form.save(commit=True)
+        else:
+            if Connection.objects.filter(conn_name=request.POST['conn_name']).exists():
+                messages.error(request, '커넥션명이 중복됩니다.')
     else:
         form = ConnectionForm()
-    # return render(request, 'connection_list.html', {'form': form})
+
     return redirect('connection:connection_list')
 
 # Read
