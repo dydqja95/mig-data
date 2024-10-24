@@ -49,12 +49,3 @@ class ConnectionDeleteView(DeleteView):
     model = Connection
     template_name = "connection_delete_confirm.html"
     success_url   = reverse_lazy('connection:connection_list')
-
-
-
-# def connection_delete(request, pk):
-#     connection = get_object_or_404(Connection, pk=pk)
-#     if request.method == 'POST':
-#         connection.delete(commit=True)
-#     return redirect('connection:connection_list')
-#     # return render(request, 'connection_delete.html', {'connection': connection})
