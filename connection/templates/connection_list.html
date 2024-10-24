@@ -13,7 +13,7 @@
                     <th scope="col"> Port </th>
                     <th scope="col"> Owner </th>
                     <th scope="col"> 수정 </th>
-                    <!-- <th scope="col"> 삭제 </th> -->
+                    <th scope="col"> 삭제 </th>
                 </tr>
             </thead>
                 <tbody>
@@ -25,7 +25,7 @@
                         <td>{{ connection.port }}</td>
                         <td>{{ connection.owner }}</td>
                         <td><a href="{#% url 'connection:connection_update' connection.id %#}" class="btn btn-primary">수정</a></td>
-                        <!-- <td><a href="{#% url 'connection:connection_delete' connection.id %#}" class="btn btn-danger">삭제</a></td> -->
+                        <td><a href="{% url 'connection:connection_delete' connection.id %}" class="btn btn-danger">삭제</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
