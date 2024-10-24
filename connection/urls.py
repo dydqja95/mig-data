@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import connection_create, connection_list, connection_update, ConnectionDeleteView
+from .views import connection_create, connection_list,  ConnectionDeleteView
 
 
 app_name = 'connection'

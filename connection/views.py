@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import DeleteView
+from django.views.generic import DeleteView, UpdateView
 from django.contrib import messages
 from django.urls import reverse_lazy
 from .models import Connection
@@ -33,19 +33,34 @@ def connection_list(request):
                  })
 
 # Update
-def connection_update(request, pk):
-    connection = get_object_or_404(Connection, pk=pk)
-    if request.method == 'POST':
-        form = ConnectionForm(request.POST, instance=connection)
-        if form.is_valid():
-            form.save()
-            return redirect('connection_list')
-    else:
-        form = ConnectionForm(instance=connection)
-    return render(request, 'connection_update.html', {'form': form})
+# class ConnectionUpdateView(UpdateView):
+#     model = Connection
+#     fields = [
+#         'conn_name',
+#         'conn_type',
+#         'owner',
+#         'ip',
+#         'port',
+#         'user',
+#         'pwd',
+#         'extra',
+#     ]
 
 # Delete
 class ConnectionDeleteView(DeleteView):
     model = Connection
-    template_name = "connection_delete_confirm.html"
+    # template_name = "connection_delete_confirm.html"
     success_url   = reverse_lazy('connection:connection_list')
+
+
+
+# def connection_update(request, pk):
+#     connection = get_object_or_404(Connection, pk=pk)
+#     if request.method == 'POST':
+#         form = ConnectionForm(request.POST, instance=connection)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('connection_list')
+#     else:
+#         form = ConnectionForm(instance=connection)
+#     return render(request, 'connection_update.html', {'form': form})

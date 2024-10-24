@@ -25,7 +25,13 @@
                         <td>{{ connection.port }}</td>
                         <td>{{ connection.owner }}</td>
                         <td><a href="{#% url 'connection:connection_update' connection.id %#}" class="btn btn-primary">수정</a></td>
-                        <td><a href="{% url 'connection:connection_delete' connection.id %}" class="btn btn-danger">삭제</a></td>
+                        <!-- <td><a href="{#% url 'connection:connection_delete' connection.id %#}" class="btn btn-danger">삭제</a></td> -->
+                        <td>
+                            <form id="delete-form" action="{% url 'connection:connection_delete' connection.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="button" class="btn btn-danger" onclick="confirmDelete()">삭제2</button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -98,4 +104,14 @@
     </div>
 </div>
 
+
+<!-- 삭제 컨펌 -->
+<script type="text/javascript">
+    function confirmDelete() {
+        if (confirm("Are you sure you want to delete this item?")) {
+            // 사용자가 확인을 클릭하면 폼 제출
+            document.getElementById("delete-form").submit();
+        }
+    }
+</script>
 {% endblock %}
