@@ -58,8 +58,3 @@ class ConnectionDeleteView(DeleteView):
 #         connection.delete(commit=True)
 #     return redirect('connection:connection_list')
 #     # return render(request, 'connection_delete.html', {'connection': connection})
-
-
-if __name__ == '__main__':
-    # connection_list()
-    connection_delete(pk=9)
