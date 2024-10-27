@@ -1,0 +1,8 @@
+<!-- connection_confirm_delete.html -->
+<h1>Are you sure you want to delete "{{ object }}"?</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">삭제</button>
+    <a href="{% url 'connection:connection_list' %}">취소</a>
+</form>

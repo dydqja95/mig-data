@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="mb-4">데이터베이스 관리</h2>
+
+    <!-- 탭 네비게이션 -->
+    <ul class="nav nav-tabs mb-4" id="dbManagementTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="connections-tab" data-bs-toggle="tab" 
+                    data-bs-target="#connections" type="button" role="tab" 
+                    aria-controls="connections" aria-selected="true">
+                커넥션 목록
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tables-tab" data-bs-toggle="tab" 
+                    data-bs-target="#tables" type="button" role="tab" 
+                    aria-controls="tables" aria-selected="false">
+                테이블 목록
+            </button>
+        </li>
+    </ul>
+
+    <!-- 탭 컨텐츠 -->
+    <div class="tab-content" id="dbManagementTabContent">
+        <!-- 커넥션 탭 -->
+        <div class="tab-pane fade show active" id="connections" role="tabpanel" 
+             aria-labelledby="connections-tab">
+            {% if connections %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Connection Name</th>
+                            <th>Connection Type</th>
+                            <th>IP</th>
+                            <th>Port</th>
+                            <th>Owner</th>
+                            <!-- <th>수정</th>
+                            <th>수정2</th> -->
+                            <th>삭제</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for connection in connections %}
+                        <tr>
+                            <td>{{ connection.conn_name }}</td>
+                            <td>{{ connection.conn_type }}</td>
+                            <td>{{ connection.ip }}</td>
+                            <td>{{ connection.port }}</td>
+                            <td>{{ connection.owner }}</td>
+                            <!-- <td><a href="{% url 'connection:connection_update' connection.id %}" class="btn btn-primary">수정</a></td>
+                            <td><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateConnectionModal" data-pk=""{{ connection.id }}>
+                                    수정
+                                </button>
+                            </td> -->
+                            <td>
+                                <form id="connection-delete-form" action="{% url 'connection:connection_delete' connection.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">삭제</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-warning" role="alert">
+                등록된 커넥션이 없습니다.
+            </div>
+            {% endif %}
+            <button type="button" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#addConnectionModal">
+                커넥션 추가
+            </button>
+        </div>
+
+        <!-- 테이블 탭 -->
+        <div class="tab-pane fade" id="tables" role="tabpanel" 
+             aria-labelledby="tables-tab">
+            {% if tables %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>테이블명</th>
+                            <th>커넥션</th>
+                            <th>스키마</th>
+                            <th>생성일</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for table in tables %}
+                        <tr>
+                            <td>{{ table.table_name }}</td>
+                            <td>{{ table.connection.conn_name }}</td>
+                            <td>{{ table.schema }}</td>
+                            <td>{{ table.created_at }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary">
+                                    상세보기
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-warning" role="alert">
+                등록된 테이블이 없습니다.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- 커넥션 추가 모달 -->
+<div class="modal fade" id="addConnectionModal" tabindex="-1" aria-labelledby="addConnectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addConnectionModalLabel">커넥션 추가</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addConnectionForm" method="POST" action="{% url 'connection:connection_create' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="conn_name" class="form-label">커넥션명</label>
+                        <input type="text" class="form-control" id="conn_name" name="conn_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="conn_type" class="form-label">커넥션 타입</label>
+                        <select class="form-select" id="conn_type" name="conn_type" required>
+                            <option value="" disabled selected>선택하세요</option>
+                            {% for value, label in connection_type_choices %}
+                                <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="owner" class="form-label">Owner</label>
+                        <input type="text" class="form-control" id="owner" name="owner" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ip" class="form-label">IP 주소</label>
+                        <input type="text" class="form-control" id="ip" name="ip" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="port" class="form-label">포트</label>
+                        <input type="text" class="form-control" id="port" name="port" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="user" class="form-label">사용자</label>
+                        <input type="text" class="form-control" id="user" name="user" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pwd" class="form-label">비밀번호</label>
+                        <input type="password" class="form-control" id="pwd" name="pwd" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="extra" class="form-label">추가 정보</label>
+                        <textarea class="form-control" id="extra" name="extra"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">추가</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 커넥션 update 모달 -->
+<!-- <div class="modal fade" id="updateConnectionModal" tabindex="-1" aria-labelledby="updateConnectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addConnectionModalLabel">커넥션 수정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addConnectionForm" method="POST" action="{#% url 'connection:connection_update' %#}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="conn_name" class="form-label">커넥션명</label>
+                        <input type="text" class="form-control" id="conn_name" name="conn_name" required> {{ connection.conn_name}}
+                    </div>
+                    <div class="mb-3">
+                        <label for="conn_type" class="form-label">커넥션 타입</label>
+                        <select class="form-select" id="conn_type" name="conn_type" required>
+                            <option value="" disabled selected>선택하세요</option>
+                            {% for value, label in connection_type_choices %}
+                                <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="owner" class="form-label">Owner</label>
+                        <input type="text" class="form-control" id="owner" name="owner" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ip" class="form-label">IP 주소</label>
+                        <input type="text" class="form-control" id="ip" name="ip" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="port" class="form-label">포트</label>
+                        <input type="text" class="form-control" id="port" name="port" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="user" class="form-label">사용자</label>
+                        <input type="text" class="form-control" id="user" name="user" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pwd" class="form-label">비밀번호</label>
+                        <input type="password" class="form-control" id="pwd" name="pwd" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="extra" class="form-label">추가 정보</label>
+                        <textarea class="form-control" id="extra" name="extra"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">추가</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> -->
+{% endblock %}
