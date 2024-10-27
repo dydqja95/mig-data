@@ -27,24 +27,24 @@ def connection_list(request):
     connection_type_choices = Connection.CONNECTION_TYPE_CHOICES
     print(connections)
     return render(request, 
-                 'connection_list.html', 
+                 'connection_list2.html', 
                  {'connections': connections,
                   'connection_type_choices': connection_type_choices,
                  })
 
 # Update
-# class ConnectionUpdateView(UpdateView):
-#     model = Connection
-#     fields = [
-#         'conn_name',
-#         'conn_type',
-#         'owner',
-#         'ip',
-#         'port',
-#         'user',
-#         'pwd',
-#         'extra',
-#     ]
+class ConnectionUpdateView(UpdateView):
+    model = Connection
+    fields = [
+        'conn_name',
+        'conn_type',
+        'owner',
+        'ip',
+        'port',
+        'user',
+        'pwd',
+        'extra',
+    ]
 
 # Delete
 class ConnectionDeleteView(DeleteView):
