@@ -31,7 +31,7 @@ def connection_list(request):
                  'connection_list.html', 
                  {'connections': connections,
                   'connection_type_choices': connection_type_choices,
-                  'tables' : tables,
+                  'tables' : tables, 
                  })
 
 # Update
