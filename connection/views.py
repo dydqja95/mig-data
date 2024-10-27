@@ -32,7 +32,7 @@ def connection_list(request):
                  {'connections': connections,
                   'connection_type_choices': connection_type_choices,
                   'tables' : tables,
-                 })
+                 }) 
 
 # Update
 class ConnectionUpdateView(UpdateView):
