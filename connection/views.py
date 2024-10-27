@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DeleteView, UpdateView
 from django.contrib import messages
 from django.urls import reverse_lazy
-from .models import Connection
+from .models import Connection, srcTableBas, srcTableDtl
 from .forms import ConnectionForm  # ConnectionForm을 정의해야 합니다.
 
 # Create
@@ -25,11 +25,13 @@ def connection_create(request):
 def connection_list(request):
     connections = Connection.objects.all()
     connection_type_choices = Connection.CONNECTION_TYPE_CHOICES
-    print(connections)
+    
+    tables = srcTableBas.objects.all()
     return render(request, 
                  'connection_list.html', 
                  {'connections': connections,
                   'connection_type_choices': connection_type_choices,
+                  'tables' : tables,
                  })
 
 # Update
