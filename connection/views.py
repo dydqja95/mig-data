@@ -27,7 +27,7 @@ def connection_list(request):
     connection_type_choices = Connection.CONNECTION_TYPE_CHOICES
     print(connections)
     return render(request, 
-                 'connection_list2.html', 
+                 'connection_list.html', 
                  {'connections': connections,
                   'connection_type_choices': connection_type_choices,
                  })

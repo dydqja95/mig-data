@@ -37,8 +37,8 @@
                             <th>IP</th>
                             <th>Port</th>
                             <th>Owner</th>
-                            <th>수정</th>
-                            <th>수정2</th>
+                            <!-- <th>수정</th>
+                            <th>수정2</th> -->
                             <th>삭제</th>
                         </tr>
                     </thead>
@@ -50,11 +50,11 @@
                             <td>{{ connection.ip }}</td>
                             <td>{{ connection.port }}</td>
                             <td>{{ connection.owner }}</td>
-                            <td><a href="{% url 'connection:connection_update' connection.id %}" class="btn btn-primary">수정</a></td>
+                            <!-- <td><a href="{% url 'connection:connection_update' connection.id %}" class="btn btn-primary">수정</a></td>
                             <td><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateConnectionModal" data-pk=""{{ connection.id }}>
                                     수정
                                 </button>
-                            </td>
+                            </td> -->
                             <td>
                                 <form id="connection-delete-form" action="{% url 'connection:connection_delete' connection.id %}" method="post">
                                     {% csrf_token %}
@@ -175,7 +175,7 @@
 
 
 <!-- 커넥션 update 모달 -->
-<div class="modal fade" id="updateConnectionModal" tabindex="-1" aria-labelledby="updateConnectionModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="updateConnectionModal" tabindex="-1" aria-labelledby="updateConnectionModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -227,5 +227,5 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 {% endblock %}
